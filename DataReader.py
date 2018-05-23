@@ -49,7 +49,7 @@ class ReviewsReader:
         return map(lambda x: x.tolist(), [trainDF['feat'], trainDF[ratingCol], testDF['feat'], testDF[ratingCol]])
 
     def getVocabSize(self):
-        return self.tokenizer.num_words
+        return len(self.tokenizer.word_index)
 
     def getMaxSenLen(self):
         return self.reviews['feat'].apply(lambda x: len(x)).max()
