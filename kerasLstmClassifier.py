@@ -18,6 +18,7 @@ x = np.random.randint(VOCAB_SIZE + 1, size=(N_SEN, MAX_SEN_LEN))
 y = np.random.randint(N_CLASSES, size=(N_SEN,))
 print(x)
 print(y)
+print(x.shape, y.shape)
 
 model = Sequential()
 ## we use mask zero as we deal with different len sentences so we pad with zeros
