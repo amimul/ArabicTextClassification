@@ -7,26 +7,22 @@ from keras.losses import mse
 from keras.layers.recurrent import LSTM
 
 import numpy as np
+from DataReader import ReviewsReader
 
 np.random.seed(1)
 
-VOCAB_SIZE = 5
-MAX_SEN_LEN = 4
-N_CLASSES = 2
-N_SEN = 2
-x = np.random.randint(VOCAB_SIZE + 1, size=(N_SEN, MAX_SEN_LEN))
-y = np.random.randint(N_CLASSES, size=(N_SEN,))
-print(x)
-print(y)
+reviews = ReviewsReader()
+xTrain, xTest, yTrain, yTest = reviews.readTrainTest(twoClass=True, balanced=True)
 
 model = Sequential()
 ## we use mask zero as we deal with different len sentences so we pad with zeros
-model.add(Embedding(VOCAB_SIZE, 10, input_length=MAX_SEN_LEN, mask_zero=True))
+model.add(Embedding(reviews.getVocabSize() + 1, 64, input_length=reviews.getMaxSenLen(), mask_zero=True))
 model.add(LSTM(10, return_sequences=False))
 model.add(Dense(1, activation=sigmoid))
 model.compile(rmsprop(), mse)
 model.summary()
-model.fit(x, y)
+model.fit(xTrain, yTrain)
 
 model.save('LSTMClassifier.h5')
-print(model.evaluate(x, y))
+print(model.evaluate(xTrain, yTrain))
+print(model.evaluate(xTest, yTest))
