@@ -1,5 +1,6 @@
 import pandas
 from keras.preprocessing.text import Tokenizer
+from keras.preprocessing.sequence import pad_sequences
 
 class ReviewsReader:
     '''
@@ -18,11 +19,17 @@ class ReviewsReader:
     def __init__(self, dataTsvPath = './data/reviews.tsv'):
         self.reviews = pandas.read_csv(dataTsvPath, sep='\t', header=None, names=['rating', 'review_id', 'user_id', 'book_id', 'review'], index_col=None)
 
+        self.reviews['2classRating'] = self.reviews['rating'].apply(lambda x: 1 if x > 3 else 0)
+
+        ### featurization
         self.tokenizer = Tokenizer()
         self.tokenizer.fit_on_texts(self.reviews['review'].tolist())
         self.reviews['feat'] = self.reviews['review'].apply(lambda x: self.tokenizer.texts_to_sequences([x])[0])
-        self.reviews['2classRating'] = self.reviews['rating'].apply(lambda x: 1 if x > 3 else 0)
-    
+
+        ### padding
+        maxSenLen = self.getMaxSenLen()
+        self.reviews['feat'] = self.reviews['feat'].apply(lambda x: pad_sequences([x], maxlen=maxSenLen, padding='post', value=0)[0])
+
     def __readIndexedData(self, indexingFile):
         '''
             returns the data in ready-to-consume format by the training model
