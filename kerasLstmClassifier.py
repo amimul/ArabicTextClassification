@@ -21,7 +21,7 @@ print(y)
 
 model = Sequential()
 ## we use mask zero as we deal with different len sentences so we pad with zeros
-model.add(Embedding(VOCAB_SIZE, 10, input_length=MAX_SEN_LEN, mask_zero=True))
+model.add(Embedding(VOCAB_SIZE + 1, 10, input_length=MAX_SEN_LEN, mask_zero=True))
 model.add(LSTM(10, return_sequences=False))
 model.add(Dense(1, activation=sigmoid))
 model.compile(rmsprop(), mse)
