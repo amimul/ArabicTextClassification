@@ -1,6 +1,7 @@
 import pandas
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
+import numpy as np
 
 class ReviewsReader:
     '''
@@ -53,7 +54,7 @@ class ReviewsReader:
         testDF = self.__readIndexedData('./data/' + nClass + 'class-' + UN + 'balanced-test.txt')
         
         ratingCol = '2classRating' if twoClass else 'rating'
-        return map(lambda x: x.tolist(), [trainDF['feat'], trainDF[ratingCol], testDF['feat'], testDF[ratingCol]])
+        return map(lambda x: np.array(x.tolist()), [trainDF['feat'], trainDF[ratingCol], testDF['feat'], testDF[ratingCol]])
 
     def getVocabSize(self):
         return len(self.tokenizer.word_index)
