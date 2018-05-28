@@ -10,7 +10,7 @@ from DataReader import ReviewsReader
 np.random.seed(1)
 
 reviews = ReviewsReader()
-xTrain, yTrain, xTest, yTest = reviews.readTrainTest(twoClass=True, balanced=True)
+xTrain, yTrain, xTest, yTest = reviews.readTrainTest(twoClass=True, balanced=False)
 
 model = Sequential()
 ## we use mask zero as we deal with different len sentences so we pad with zeros
