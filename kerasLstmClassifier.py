@@ -11,7 +11,7 @@ from DataReader import ReviewsReader
 np.random.seed(1)
 
 reviews = ReviewsReader()
-xTrain, yTrain, xTest, yTest = reviews.readTrainTest(twoClass=False, balanced=True)
+xTrain, yTrain, xTest, yTest = reviews.readTrainTest(twoClass=False, balanced=False)
 
 yTrain = keras.utils.to_categorical(yTrain - 1)
 yTest = keras.utils.to_categorical(yTest - 1)
