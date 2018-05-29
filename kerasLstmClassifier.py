@@ -1,7 +1,7 @@
 import keras
 from keras.models import Sequential
 from keras.layers.embeddings import Embedding
-from keras.layers.core import Dense
+from keras.layers.core import Dense, Dropout
 from keras.activations import softmax
 from keras.layers.recurrent import LSTM
 
@@ -19,11 +19,14 @@ yTest = keras.utils.to_categorical(yTest - 1)
 model = Sequential()
 ## we use mask zero as we deal with different len sentences so we pad with zeros
 model.add(Embedding(reviews.getVocabSize() + 1, 64, input_length=reviews.getMaxSenLen(), mask_zero=True))
+model.add(LSTM(30, return_sequences=True))
+model.add(Dropout(0.5))
 model.add(LSTM(10, return_sequences=False))
+model.add(Dropout(0.5))
 model.add(Dense(5, activation=softmax))
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 model.summary()
-model.fit(xTrain, yTrain, epochs=3, batch_size=64)
+model.fit(xTrain, yTrain, epochs=2, batch_size=64)
 
 model.save('LSTMClassifier.h5')
 print(model.evaluate(xTrain, yTrain, batch_size=64))
