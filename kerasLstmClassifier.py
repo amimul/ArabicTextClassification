@@ -23,7 +23,7 @@ model.add(LSTM(10, return_sequences=False))
 model.add(Dense(5, activation=softmax))
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 model.summary()
-model.fit(xTrain, yTrain)
+model.fit(xTrain, yTrain, epochs=2)
 
 model.save('LSTMClassifier.h5')
 print(model.evaluate(xTrain, yTrain))
