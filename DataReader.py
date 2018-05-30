@@ -61,3 +61,6 @@ class ReviewsReader:
 
     def getMaxSenLen(self):
         return self.reviews['feat'].apply(lambda x: len(x)).max()
+
+    def getTokenizerWordIndex(self):
+        return self.tokenizer.word_index
