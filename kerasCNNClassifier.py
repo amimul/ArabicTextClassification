@@ -1,6 +1,7 @@
 from keras.models import Sequential
 from keras.layers.embeddings import Embedding
 from keras.layers.core import Dense
+from keras.layers import Conv1D, GlobalAveragePooling1D
 from keras.activations import sigmoid
 from keras.layers.recurrent import GRU
 
@@ -38,12 +39,13 @@ for word, i in word_index.items():
 
 model = Sequential()
 ## we use mask zero as we deal with different len sentences so we pad with zeros
-model.add(Embedding(reviews.getVocabSize() + 1, EMBEDDING_DIM, weights=[embedding_matrix], input_length=reviews.getMaxSenLen(), mask_zero=True, trainable=False))
-model.add(GRU(10, return_sequences=False))
+model.add(Embedding(reviews.getVocabSize() + 1, EMBEDDING_DIM, weights=[embedding_matrix], input_length=reviews.getMaxSenLen(), mask_zero=False, trainable=False))
+model.add(Conv1D(64, 5, padding='same'))
+model.add(GlobalAveragePooling1D())
 model.add(Dense(1, activation=sigmoid))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 model.summary()
-model.fit(xTrain, yTrain, epochs=7, batch_size=120)
+model.fit(xTrain, yTrain, epochs=1, batch_size=120)
 
 model.save('LSTMClassifier.h5')
 print(model.evaluate(xTrain, yTrain, batch_size=100))
