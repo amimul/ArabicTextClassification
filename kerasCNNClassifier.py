@@ -56,7 +56,7 @@ model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy']
 model.summary()
 
 model.load_weights('CNNClassifier_Epoch24W')
-model.fit(xTrain, yTrain, epochs=2, batch_size=128)
+model.fit(xTrain, yTrain, epochs=3, batch_size=128)
 
 model.save('./CNNClassifier_Epoch24_dropout0_2_oneMoreEpoch.h5')
 
