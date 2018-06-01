@@ -57,14 +57,14 @@ import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 
 import keras
-for i in range(21, 30):
+for i in range(2, 15):
     print('##################')
     print('################## EPOCH', i)
     print('##################')
     
-    model = keras.models.load_model('./CNNClassifier.h5')
+    model = keras.models.load_model('./CNNClassifier_Epoch24_dropout0_2_oneMoreEpoch.h5')
     model.fit(xTrain, yTrain, epochs=1, batch_size=128)
 
-    model.save('CNNClassifier.h5')
+    model.save('./CNNClassifier_Epoch24_dropout0_2_oneMoreEpoch.h5')
     print(model.evaluate(xTrain, yTrain, batch_size=128))
     print(model.evaluate(xTest, yTest, batch_size=128))
