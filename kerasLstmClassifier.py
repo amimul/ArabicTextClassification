@@ -29,5 +29,5 @@ model.compile(rmsprop(), mse)
 model.summary()
 model.fit(x, y)
 
-model.save('LSTMClassifier.h5')
+model.save('dummy.h5')
 print(model.evaluate(x, y))
