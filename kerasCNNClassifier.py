@@ -53,6 +53,9 @@ except:
 # model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 # model.summary()
 
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
+
 import keras
 for i in range(9, 20):
     print('##################')
