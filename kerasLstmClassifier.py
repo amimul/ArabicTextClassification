@@ -7,6 +7,8 @@ from keras.layers.recurrent import GRU
 import numpy as np
 from DataReader import ReviewsReader
 
+print('Starting...')
+
 np.random.seed(1)
 
 reviews = ReviewsReader()
@@ -35,6 +37,7 @@ for word, i in word_index.items():
         # words not found in embedding index will be all-zeros.
         embedding_matrix[i] = embedding_vector
 
+print('Building model...')
 
 model = Sequential()
 ## we use mask zero as we deal with different len sentences so we pad with zeros
