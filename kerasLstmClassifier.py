@@ -44,7 +44,7 @@ model.add(GRU(50, return_sequences=False))
 model.add(Dense(1, activation=sigmoid))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 model.summary()
-model.fit(xTrain, yTrain, epochs=1, batch_size=120)
+model.fit(xTrain, yTrain, epochs=2, batch_size=120)
 
 model.save('LSTMClassifier.h5')
 print(model.evaluate(xTrain, yTrain, batch_size=100))
