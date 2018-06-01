@@ -39,11 +39,12 @@ for word, i in word_index.items():
 model = Sequential()
 ## we use mask zero as we deal with different len sentences so we pad with zeros
 model.add(Embedding(reviews.getVocabSize() + 1, EMBEDDING_DIM, weights=[embedding_matrix], input_length=reviews.getMaxSenLen(), mask_zero=True, trainable=False))
-model.add(GRU(10, return_sequences=False))
+model.add(GRU(100, return_sequences=True))
+model.add(GRU(50, return_sequences=False))
 model.add(Dense(1, activation=sigmoid))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 model.summary()
-model.fit(xTrain, yTrain, epochs=7, batch_size=120)
+model.fit(xTrain, yTrain, epochs=1, batch_size=120)
 
 model.save('LSTMClassifier.h5')
 print(model.evaluate(xTrain, yTrain, batch_size=100))
