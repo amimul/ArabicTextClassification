@@ -54,9 +54,14 @@ except:
 # model.summary()
 
 import keras
-model = keras.models.load_model('./CNNClassifier.h5')
-model.fit(xTrain, yTrain, epochs=1, batch_size=128)
+for i in range(9, 20):
+    print('##################')
+    print('################## EPOCH', i)
+    print('##################')
+    
+    model = keras.models.load_model('./CNNClassifier.h5')
+    model.fit(xTrain, yTrain, epochs=1, batch_size=128)
 
-model.save('CNNClassifier.h5')
-print(model.evaluate(xTrain, yTrain, batch_size=128))
-print(model.evaluate(xTest, yTest, batch_size=128))
+    model.save('CNNClassifier.h5')
+    print(model.evaluate(xTrain, yTrain, batch_size=128))
+    print(model.evaluate(xTest, yTest, batch_size=128))
