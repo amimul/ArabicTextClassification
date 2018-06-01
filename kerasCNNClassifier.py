@@ -47,7 +47,7 @@ model.add(GlobalAveragePooling1D())
 model.add(Dense(1, activation=sigmoid))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 model.summary()
-model.fit(xTrain, yTrain, epochs=9, batch_size=120)
+model.fit(xTrain, yTrain, epochs=10, batch_size=120)
 
 model.save('CNNClassifier.h5')
 print(model.evaluate(xTrain, yTrain, batch_size=100))
