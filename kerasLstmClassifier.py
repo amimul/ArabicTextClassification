@@ -14,6 +14,7 @@ np.random.seed(1)
 reviews = ReviewsReader()
 xTrain, yTrain, xTest, yTest = reviews.readTrainTest(twoClass=True, balanced=False)
 
+print('reading embedding...')
 
 ## read and prepare embedding
 embeddings_index = {}
