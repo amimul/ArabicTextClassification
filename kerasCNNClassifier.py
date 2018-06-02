@@ -31,12 +31,13 @@ for word, i in word_index.items():
         embedding_matrix[i] = embedding_vector
         c[0] += 1
     else:
+        embedding_matrix[i] = np.random.rand(EMBEDDING_DIM)
         c[1] += 1
 print('found', c)
 
 model = Sequential()
 ## we use mask zero as we deal with different len sentences so we pad with zeros
-model.add(Embedding(reviews.getVocabSize() + 1, EMBEDDING_DIM, weights=[embedding_matrix], input_length=reviews.getMaxSenLen(), mask_zero=False, trainable=False))
+model.add(Embedding(reviews.getVocabSize() + 1, EMBEDDING_DIM, weights=[embedding_matrix], input_length=reviews.getMaxSenLen(), mask_zero=False, trainable=True))
 model.add(Conv1D(128, 5, padding='same', activation='relu'))
 model.add(MaxPool1D(5))
 model.add(Dropout(0.4))
