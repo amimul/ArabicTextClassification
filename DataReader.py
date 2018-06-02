@@ -73,13 +73,13 @@ class ReviewsReader:
         testDF = self.__readIndexedData('./data/' + nClass + 'class-' + UN + 'balanced-test.txt')
         
         ### featurization
-        self.tokenizer = Tokenizer()
+        self.tokenizer = Tokenizer(char_level=True)
         self.tokenizer.fit_on_texts(trainDF['review'].tolist())
         trainDF['feat'] = trainDF['review'].apply(lambda x: self.tokenizer.texts_to_sequences([x])[0])
         testDF['feat'] = testDF['review'].apply(lambda x: self.tokenizer.texts_to_sequences([x])[0])
 
         ### padding
-        self.maxSenLen = trainDF['feat'].apply(lambda x: len(x)).max()
+        self.maxSenLen = 700
         trainDF['feat'] = trainDF['feat'].apply(lambda x: pad_sequences([x], maxlen=self.maxSenLen, padding='post', value=0)[0])
         testDF['feat'] = testDF['feat'].apply(lambda x: pad_sequences([x], maxlen=self.maxSenLen, padding='post', value=0)[0])
 
