@@ -9,35 +9,30 @@ from keras.callbacks import ModelCheckpoint, CSVLogger
 
 import numpy as np
 from DataReader import ReviewsReader
+import gensim
 
 np.random.seed(1)
 
 reviews = ReviewsReader()
 xTrain, yTrain, xTest, yTest = reviews.readTrainTest(twoClass=True, balanced=False)
 
-
 ## read and prepare embedding
-embeddings_index = {}
-with open('./wiki.ar.vec', 'r', encoding='utf8') as f:
-    n, d = map(int, f.readline().split())
-    for line in f:
-        line = line.strip()
-        values = line.split()
-        word = ' '.join(values[:-d])
-        coefs = np.asarray(values[-d:], dtype='float32')
-        embeddings_index[word] = coefs
-
-print('Found %s word vectors in embedding.' % len(embeddings_index))
+embeddingModel = gensim.models.Word2Vec.load('./www_cbow_100/www_cbow_100')
 
 word_index = reviews.getTokenizerWordIndex()
-EMBEDDING_DIM = d
+EMBEDDING_DIM = 100
 embedding_matrix = np.zeros((len(word_index) + 1, EMBEDDING_DIM))
+c = [0, 0]
 for word, i in word_index.items():
-    embedding_vector = embeddings_index.get(word)
-    if embedding_vector is not None:
-        # words not found in embedding index will be all-zeros.
-        embedding_matrix[i] = embedding_vector
+    word = ReviewsReader.cleanStr(word)
 
+    if word in embeddingModel.wv.vocab:
+        embedding_vector = embeddingModel.wv[word]
+        embedding_matrix[i] = embedding_vector
+        c[0] += 1
+    else:
+        c[1] += 1
+print('found', c)
 
 model = Sequential()
 ## we use mask zero as we deal with different len sentences so we pad with zeros
