@@ -24,31 +24,35 @@ class ReviewsReader:
         self.reviews['2classRating'] = self.reviews['rating'].apply(lambda x: 1 if x > 3 else 0)
 
         ### normalizaion
-        self.reviews['review'] = self.reviews['review'].apply(lambda x: re.sub(r'[^\w\s]', '', x))
+        self.reviews['review'] = self.reviews['review'].apply(lambda x: ReviewsReader.__normalize(x))
 
-        self.reviews['review'] = self.reviews['review'].apply(lambda x: x.replace('آ', 'ا'))
-        self.reviews['review'] = self.reviews['review'].apply(lambda x: x.replace('أ', 'ا'))
-        self.reviews['review'] = self.reviews['review'].apply(lambda x: x.replace('ة', 'ه'))
-        self.reviews['review'] = self.reviews['review'].apply(lambda x: x.replace('إ', 'ا'))
-        self.reviews['review'] = self.reviews['review'].apply(lambda x: x.replace('ى', 'ي'))
-        self.reviews['review'] = self.reviews['review'].apply(lambda x: x.replace('ﻵ', 'لا'))
-        self.reviews['review'] = self.reviews['review'].apply(lambda x: x.replace('ـ', ''))
+    def __normalize(s):
+        x = s
+        x = re.sub(r'[^\w\s]', '', x)
 
-        self.reviews['review'] = self.reviews['review'].apply(lambda x: x.replace('\u0660', '0'))
-        self.reviews['review'] = self.reviews['review'].apply(lambda x: x.replace('\u0661', '1'))
-        self.reviews['review'] = self.reviews['review'].apply(lambda x: x.replace('\u0662', '2'))
-        self.reviews['review'] = self.reviews['review'].apply(lambda x: x.replace('\u0663', '3'))
-        self.reviews['review'] = self.reviews['review'].apply(lambda x: x.replace('\u0664', '4'))
-        self.reviews['review'] = self.reviews['review'].apply(lambda x: x.replace('\u0665', '5'))
-        self.reviews['review'] = self.reviews['review'].apply(lambda x: x.replace('\u0666', '6'))
-        self.reviews['review'] = self.reviews['review'].apply(lambda x: x.replace('\u0667', '7'))
-        self.reviews['review'] = self.reviews['review'].apply(lambda x: x.replace('\u0668', '8'))
-        self.reviews['review'] = self.reviews['review'].apply(lambda x: x.replace('\u0669', '9'))
+        x = x.replace('آ', 'ا')
+        x = x.replace('أ', 'ا')
+        x = x.replace('ة', 'ه')
+        x = x.replace('إ', 'ا')
+        x = x.replace('ى', 'ي')
+        x = x.replace('ﻵ', 'لا')
+        x = x.replace('ـ', '')
 
-        self.reviews['review'] = self.reviews['review'].apply(lambda x: ' '.join(' '.join(re.findall(r'([^\d]+|[\d]+)', x)).split()))
+        x = x.replace('\u0660', '0')
+        x = x.replace('\u0661', '1')
+        x = x.replace('\u0662', '2')
+        x = x.replace('\u0663', '3')
+        x = x.replace('\u0664', '4')
+        x = x.replace('\u0665', '5')
+        x = x.replace('\u0666', '6')
+        x = x.replace('\u0667', '7')
+        x = x.replace('\u0668', '8')
+        x = x.replace('\u0669', '9')
 
-        self.reviews['review'] = self.reviews['review'].apply(lambda x: re.sub(r'([\u0600-\u06ff])\1{2,}', r'\1', x))
+        x = ' '.join(' '.join(re.findall(r'([^\d]+|[\d]+)', x)).split())
 
+        x = re.sub(r'([\u0600-\u06ff])\1{2,}', r'\1', x)
+        return x
 
     def __readIndexedData(self, indexingFile):
         '''
