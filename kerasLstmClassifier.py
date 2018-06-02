@@ -3,6 +3,7 @@ from keras.layers.embeddings import Embedding
 from keras.layers.core import Dense
 from keras.activations import sigmoid
 from keras.layers.recurrent import GRU
+from keras.callbacks import ModelCheckpoint, CSVLogger
 
 import numpy as np
 from DataReader import ReviewsReader
@@ -44,7 +45,9 @@ model.add(GRU(50, return_sequences=False))
 model.add(Dense(1, activation=sigmoid))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 model.summary()
-model.fit(xTrain, yTrain, epochs=2, batch_size=120)
+
+checkpointer = ModelCheckpoint(filepath='./modelChk.{epoch:02d}-{val_acc:.2f}.hdf5', verbose=1, save_best_only=False)
+model.fit(xTrain, yTrain, epochs=40, validation_data=(xTest, yTest), batch_size=128, callbacks=[checkpointer, CSVLogger('./LSTMTrain.log')])
 
 model.save('LSTMClassifier.h5')
 print(model.evaluate(xTrain, yTrain, batch_size=100))
