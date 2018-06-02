@@ -22,15 +22,6 @@ class ReviewsReader:
 
         self.reviews['2classRating'] = self.reviews['rating'].apply(lambda x: 1 if x > 3 else 0)
 
-        ### featurization
-        self.tokenizer = Tokenizer()
-        self.tokenizer.fit_on_texts(self.reviews['review'].tolist())
-        self.reviews['feat'] = self.reviews['review'].apply(lambda x: self.tokenizer.texts_to_sequences([x])[0])
-
-        ### padding
-        maxSenLen = self.getMaxSenLen()
-        self.reviews['feat'] = self.reviews['feat'].apply(lambda x: pad_sequences([x], maxlen=maxSenLen, padding='post', value=0)[0])
-
     def __readIndexedData(self, indexingFile):
         '''
             returns the data in ready-to-consume format by the training model
@@ -53,6 +44,17 @@ class ReviewsReader:
         trainDF = self.__readIndexedData('./data/' + nClass + 'class-' + UN + 'balanced-train.txt')
         testDF = self.__readIndexedData('./data/' + nClass + 'class-' + UN + 'balanced-test.txt')
         
+        ### featurization
+        self.tokenizer = Tokenizer()
+        self.tokenizer.fit_on_texts(trainDF['review'].tolist())
+        trainDF['feat'] = trainDF['review'].apply(lambda x: self.tokenizer.texts_to_sequences([x])[0])
+        testDF['feat'] = testDF['review'].apply(lambda x: self.tokenizer.texts_to_sequences([x])[0])
+
+        ### padding
+        self.maxSenLen = trainDF['feat'].apply(lambda x: len(x)).max()
+        trainDF['feat'] = trainDF['feat'].apply(lambda x: pad_sequences([x], maxlen=self.maxSenLen, padding='post', value=0)[0])
+        testDF['feat'] = testDF['feat'].apply(lambda x: pad_sequences([x], maxlen=self.maxSenLen, padding='post', value=0)[0])
+
         ratingCol = '2classRating' if twoClass else 'rating'
         return map(lambda x: np.array(x.tolist()), [trainDF['feat'], trainDF[ratingCol], testDF['feat'], testDF[ratingCol]])
 
@@ -60,7 +62,7 @@ class ReviewsReader:
         return len(self.tokenizer.word_index)
 
     def getMaxSenLen(self):
-        return self.reviews['feat'].apply(lambda x: len(x)).max()
+        return self.maxSenLen
 
     def getTokenizerWordIndex(self):
         return self.tokenizer.word_index
