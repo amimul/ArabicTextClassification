@@ -3,7 +3,7 @@ from keras.layers.embeddings import Embedding
 from keras.layers.core import Dense
 from keras.layers import Conv1D, GlobalAveragePooling1D, MaxPool1D, Dropout
 from keras.activations import sigmoid
-from keras.layers.recurrent import GRU
+from keras.layers.recurrent import LSTM
 
 from keras.callbacks import ModelCheckpoint, CSVLogger
 
@@ -37,24 +37,15 @@ print('found', c)
 
 model = Sequential()
 ## we use mask zero as we deal with different len sentences so we pad with zeros
-model.add(Embedding(reviews.getVocabSize() + 1, EMBEDDING_DIM, weights=[embedding_matrix], input_length=reviews.getMaxSenLen(), mask_zero=False, trainable=True))
-model.add(Conv1D(128, 5, padding='same', activation='relu'))
-model.add(MaxPool1D(5))
-model.add(Dropout(0.4))
-model.add(Conv1D(50, 5, padding='same', activation='relu'))
-model.add(GlobalAveragePooling1D())
-model.add(Dropout(0.4))
-model.add(Dense(20))
-model.add(Dropout(0.2))
-model.add(Dense(20))
-model.add(Dropout(0.2))
+model.add(Embedding(reviews.getVocabSize() + 1, EMBEDDING_DIM, weights=[embedding_matrix], input_length=reviews.getMaxSenLen(), mask_zero=True, trainable=True))
+model.add(LSTM(50))
 model.add(Dense(1, activation=sigmoid))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 model.summary()
 
 checkpointer = ModelCheckpoint(filepath='./modelChk.{epoch:02d}-{val_acc:.2f}.hdf5', verbose=1, save_best_only=False)
-model.fit(xTrain, yTrain, epochs=40, validation_data=(xTest, yTest), batch_size=128, callbacks=[checkpointer, CSVLogger('./CNNDropoutTrain.log')])
+model.fit(xTrain, yTrain, epochs=40, validation_data=(xTest, yTest), batch_size=128, callbacks=[checkpointer, CSVLogger('./LSTMTrain.log')])
 
-model.save('CNNClassifier.h5')
+model.save('LSTMClassifier.h5')
 print(model.evaluate(xTrain, yTrain, batch_size=128))
 print(model.evaluate(xTest, yTest, batch_size=128))
