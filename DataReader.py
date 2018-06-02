@@ -2,6 +2,7 @@ import pandas
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 import numpy as np
+import re
 
 class ReviewsReader:
     '''
@@ -21,6 +22,8 @@ class ReviewsReader:
         self.reviews = pandas.read_csv(dataTsvPath, sep='\t', header=None, names=['rating', 'review_id', 'user_id', 'book_id', 'review'], index_col=None)
 
         self.reviews['2classRating'] = self.reviews['rating'].apply(lambda x: 1 if x > 3 else 0)
+
+        self.reviews['review'] = self.reviews['review'].apply(lambda x: re.sub(r'[^\w\s]', '', x))
 
     def __readIndexedData(self, indexingFile):
         '''
