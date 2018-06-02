@@ -83,7 +83,7 @@ class ReviewsReader:
         testDF['feat'] = testDF['review'].apply(lambda x: self.tokenizer.texts_to_sequences([x])[0])
 
         ### padding
-        self.maxSenLen = trainDF['feat'].apply(lambda x: len(x)).max()
+        self.maxSenLen = 100
         trainDF['feat'] = trainDF['feat'].apply(lambda x: pad_sequences([x], maxlen=self.maxSenLen, padding='post', value=0)[0])
         testDF['feat'] = testDF['feat'].apply(lambda x: pad_sequences([x], maxlen=self.maxSenLen, padding='post', value=0)[0])
 
