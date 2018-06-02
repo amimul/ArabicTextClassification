@@ -57,7 +57,7 @@ import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 
 import keras
-for i in range(2, 15):
+for i in range(6, 15):
     print('##################')
     print('################## EPOCH', i)
     print('##################')
