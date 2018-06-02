@@ -90,7 +90,7 @@ class ReviewsReader:
         testDF = self.__readIndexedData('./data/' + nClass + 'class-' + UN + 'balanced-test.txt')
         
         ### featurization
-        self.tokenizer = Tokenizer()
+        self.tokenizer = Tokenizer(num_words=77000)
         self.tokenizer.fit_on_texts(trainDF['review'].tolist())
         trainDF['feat'] = trainDF['review'].apply(lambda x: self.tokenizer.texts_to_sequences([x])[0])
         testDF['feat'] = testDF['review'].apply(lambda x: self.tokenizer.texts_to_sequences([x])[0])
