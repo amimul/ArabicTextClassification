@@ -96,7 +96,7 @@ class ReviewsReader:
         testDF['feat'] = testDF['review'].apply(lambda x: self.tokenizer.texts_to_sequences([x])[0])
 
         ### padding
-        self.maxSenLen = 80
+        self.maxSenLen = trainDF['feat'].apply(lambda x: len(x)).max()
         trainDF['feat'] = trainDF['feat'].apply(lambda x: pad_sequences([x], maxlen=self.maxSenLen, padding='post', value=0)[0])
         testDF['feat'] = testDF['feat'].apply(lambda x: pad_sequences([x], maxlen=self.maxSenLen, padding='post', value=0)[0])
 
@@ -111,3 +111,9 @@ class ReviewsReader:
 
     def getTokenizerWordIndex(self):
         return self.tokenizer.word_index
+
+    def readValidationData(self):
+        validDF = self.__readIndexedData('./data/2class-unbalanced-val.txt')
+        validDF['feat'] = validDF['review'].apply(lambda x: self.tokenizer.texts_to_sequences([x])[0])
+        validDF['feat'] = validDF['feat'].apply(lambda x: pad_sequences([x], maxlen=self.maxSenLen, padding='post', value=0)[0])
+        return validDF['review'].tolist(), np.array(validDF['feat'].tolist()), np.array(validDF['2classRating'].tolist())
