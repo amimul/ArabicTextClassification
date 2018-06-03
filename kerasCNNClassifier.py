@@ -19,12 +19,9 @@ EMBEDDING_DIM = 64
 model = Sequential()
 ## we use mask zero as we deal with different len sentences so we pad with zeros
 model.add(Embedding(reviews.getVocabSize() + 1, EMBEDDING_DIM, input_length=reviews.getMaxSenLen(), mask_zero=False))
-model.add(Dropout(0.4))
 model.add(Conv1D(50, 5, padding='same', activation='relu'))
 model.add(GlobalAveragePooling1D())
-model.add(Dropout(0.4))
 model.add(Dense(20, activation='relu'))
-model.add(Dropout(0.2))
 model.add(Dense(1, activation=sigmoid))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 model.summary()
