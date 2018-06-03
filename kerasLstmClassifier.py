@@ -2,7 +2,7 @@ import keras
 from keras.models import Sequential
 from keras.layers.embeddings import Embedding
 from keras.layers.core import Dense, Dropout
-from keras.layers import Conv1D
+from keras.layers import Conv1D, GlobalAveragePooling1D
 from keras.activations import softmax
 from keras.layers.recurrent import LSTM
 from keras.callbacks import ModelCheckpoint, CSVLogger
