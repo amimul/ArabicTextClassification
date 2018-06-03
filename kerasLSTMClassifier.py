@@ -1,7 +1,7 @@
 from keras.models import Sequential
 from keras.layers.embeddings import Embedding
 from keras.layers.core import Dense
-from keras.layers import Conv1D, GlobalAveragePooling1D, MaxPool1D, Dropout
+from keras.layers import Conv1D, GlobalAveragePooling1D, MaxPool1D, Dropout, Bidirectional
 from keras.activations import sigmoid
 from keras.layers.recurrent import LSTM
 
@@ -39,7 +39,7 @@ model = Sequential()
 ## we use mask zero as we deal with different len sentences so we pad with zeros
 model.add(Embedding(reviews.getVocabSize() + 1, EMBEDDING_DIM, weights=[embedding_matrix], input_length=reviews.getMaxSenLen(), mask_zero=True, trainable=True))
 model.add(Dropout(0.3))
-model.add(LSTM(50))
+model.add(Bidirectional(LSTM(50)))
 model.add(Dropout(0.3))
 model.add(Dense(50))
 model.add(Dropout(0.3))
